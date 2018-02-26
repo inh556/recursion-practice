@@ -328,11 +328,23 @@ var fizzBuzz = function(n) {
 // countOccurrence([2,7,4,4,1,4], 4) // 3
 // countOccurrence([2,'banana',4,4,1,'banana'], 'banana') // 2
 var countOccurrence = function(array, value) {
+  if(array.length === 0) {
+    return 0;
+  }
+  if(array.shift() === value) {
+    return 1 + countOccurrence(array, value)
+  }
+  return countOccurrence(array, value)
 };
 
 // 21. Write a recursive version of map.
 // rMap([1,2,3], timesTwo); // [2,4,6]
 var rMap = function(array, callback) {
+	var arr = array.slice();
+	if(arr.length ===0) {
+		return [];
+	}
+	return [].concat(callback(arr.shift()), rMap(arr, callback));	
 };
 
 // 22. Write a function that counts the number of times a key occurs in an object.
@@ -340,10 +352,12 @@ var rMap = function(array, callback) {
 // countKeysInObj(obj, 'r') // 1
 // countKeysInObj(obj, 'e') // 2
 var countKeysInObj = function(obj, key) {
+
 };
 
-// 23. Write a function that counts the number of times a value occurs in an object.
+
 // var obj = {'e':{'x':'y'},'t':{'r':{'e':'r'},'p':{'y':'r'}},'y':'e'};
+// 23. Write a function that counts the number of times a value occurs in an object.
 // countValuesInObj(obj, 'r') // 2
 // countValuesInObj(obj, 'e') // 1
 var countValuesInObj = function(obj, value) {
@@ -374,11 +388,27 @@ var nthFibo = function(n) {
 // var words = ['i', 'am', 'learning', 'recursion'];
 // capitalizedWords(words); // ['I', 'AM', 'LEARNING', 'RECURSION']
 var capitalizeWords = function(array) {
+	if(array.length ===0) {
+		return [];
+	}
+	var arr = array;
+	var str = arr[0].toUpperCase();
+	arr.shift();
+	return [].concat(str, capitalizeWords(arr))
 };
 
 // 28. Given an array of strings, capitalize the first letter of each index.
 // capitalizeFirst(['car','poop','banana']); // ['Car','Poop','Banana']
 var capitalizeFirst = function(array) {
+    if(array.length === 0) {
+      return []
+    }
+	var arr = array.slice();
+	var subArr = arr[0].split('');
+    subArr[0] = subArr[0].toUpperCase();
+    arr.shift();
+	return [].concat(subArr.join(''), capitalizeFirst(arr));
+
 };
 
 // 29. Return the sum of all even numbers in an object containing nested objects.
@@ -396,11 +426,27 @@ var nestedEvenSum = function(obj) {
 // 30. Flatten an array containing nested arrays.
 // flatten([1,[2],[3,[[4]]],5]); // [1,2,3,4,5]
 var flatten = function(array) {
+
 };
 
 // 31. Given a string, return an object containing tallies of each letter.
 // letterTally('potato'); // {p:1, o:2, t:2, a:1}
 var letterTally = function(str, obj) {
+	var add = function(str, obj){
+  if(str.length ===0) {
+    return {};
+  } 
+  var arr = str.split('');
+  var key = arr[0];
+  arr.shift()
+  var str = arr.join('')
+  if(obj[key]) {
+    obj[key] +=1;
+    return Object.assign(obj, letterTally(str, obj));
+  }
+  obj[key] =1;
+  return Object.assign(obj, letterTally(str, obj));
+}
 };
 
 // 32. Eliminate consecutive duplicates in a list. If the list contains repeated
