@@ -352,7 +352,14 @@ var rMap = function(array, callback) {
 // countKeysInObj(obj, 'r') // 1
 // countKeysInObj(obj, 'e') // 2
 var countKeysInObj = function(obj, key) {
-
+  var keys = Object.keys(obj);
+  var result = keys.filter(k => k === key).length;
+  for(var i = 0; i < Object.values(obj).length; i++) {
+    if(typeof(Object.values(obj)[i]) === 'object') {     
+       result += countKeysInObj(Object.values(obj)[i], key);
+    }
+  }
+  return result;  
 };
 
 
@@ -431,23 +438,23 @@ var flatten = function(array) {
 
 // 31. Given a string, return an object containing tallies of each letter.
 // letterTally('potato'); // {p:1, o:2, t:2, a:1}
-var letterTally = function(str, obj) {
-	var add = function(str, obj){
-  if(str.length ===0) {
-    return {};
-  } 
-  var arr = str.split('');
-  var key = arr[0];
-  arr.shift()
-  var str = arr.join('')
-  if(obj[key]) {
-    obj[key] +=1;
-    return Object.assign(obj, letterTally(str, obj));
-  }
-  obj[key] =1;
-  return Object.assign(obj, letterTally(str, obj));
-}
-};
+// var letterTally = function(str, obj) {
+// 	var add = function(str, obj){
+//   if(str.length ===0) {
+//     return {};
+//   } 
+//   var arr = str.split('');
+//   var key = arr[0];
+//   arr.shift()
+//   var str = arr.join('')
+//   if(obj[key]) {
+//     obj[key] +=1;
+//     return Object.assign(obj, letterTally(str, obj));
+//   }
+//   obj[key] =1;
+//   return Object.assign(obj, letterTally(str, obj));
+// }
+// };
 
 // 32. Eliminate consecutive duplicates in a list. If the list contains repeated
 // elements they should be replaced with a single copy of the element. The order of the
@@ -500,6 +507,18 @@ var binarySearch = function(array, target, min, max) {
 // mergeSort([34,7,23,32,5,62]) // [5,7,23,32,34,62]
 // https://www.khanacademy.org/computing/computer-science/algorithms/merge-sort/a/divide-and-conquer-algorithms
 var mergeSort = function(array) {
+	if(array.length ===0) {
+		return [];
+	}
+	var min = array[0];
+	for(var i = 1; i < array.length;i++){		
+		if(array[i] < min) {
+			var min = array[i];
+			var temp2 = min;
+
+		}
+	}
+
 };
 
 
