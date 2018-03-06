@@ -368,11 +368,35 @@ var countKeysInObj = function(obj, key) {
 // countValuesInObj(obj, 'r') // 2
 // countValuesInObj(obj, 'e') // 1
 var countValuesInObj = function(obj, value) {
+	var values = Object.values(obj);
+    var result = values.filter(v => v === value).length;
+  	for(var i = 0; i < Object.values(obj).length; i++) {
+    	if(typeof(Object.values(obj)[i]) === 'object') {     
+       		result += countValuesInObj(Object.values(obj)[i], value);
+    	}
+  	}
+  	return result; 
 };
 
 // 24. Find all keys in an object (and nested objects) by a provided name and rename
 // them to a provided new name while preserving the value stored at that key.
 var replaceKeysInObj = function(obj, oldKey, newKey) {
+	
+	var keys = Object.keys(obj);
+    for(var j = 0; j < keys.length; j++) {
+    	if(keys[j] === oldKey) {
+    		Object.defineProperty(obj, newKey,
+        		Object.getOwnPropertyDescriptor(obj, oldKey));
+    		delete obj[oldKey];
+    	}
+    }
+    for(var i = 0; i < Object.values(obj).length; i++) {
+    	if(typeof(Object.values(obj)[i]) === 'object') {     
+       		replaceKeysInObj(Object.values(obj)[i], oldKey, newKey);
+    	}
+  	}
+  	return obj;  
+
 };
 
 // 25. Get the first n Fibonacci numbers. In the Fibonacci sequence, each subsequent
@@ -428,33 +452,41 @@ var capitalizeFirst = function(array) {
 // };
 // nestedEvenSum(obj1); // 10
 var nestedEvenSum = function(obj) {
+	var values = Object.values(obj);
+    var result = values.filter(el => el % 2 ===0);
+    var sum = 0;
+    for(var j = 0; j < result.length; j++) {
+      sum += result[j];
+    }
+  	for(var i = 0; i < Object.values(obj).length; i++) {
+    	if(typeof(Object.values(obj)[i]) === 'object') {     
+       		sum += nestedEvenSum(Object.values(obj)[i]);
+    	}
+  	}
+  	return sum; 
 };
-
 // 30. Flatten an array containing nested arrays.
 // flatten([1,[2],[3,[[4]]],5]); // [1,2,3,4,5]
 var flatten = function(array) {
-
+  var result = [];
+  if(!array.length) {
+    return result;
+  }
+  for(var i = 0; i < array.length; i++ ) {
+    if(Array.isArray(array[i])) {
+       result = result.concat(flatten(array[i]));
+    } else {
+    	result = result.concat(array[i])
+    }
+  }
+  return result;
 };
 
 // 31. Given a string, return an object containing tallies of each letter.
 // letterTally('potato'); // {p:1, o:2, t:2, a:1}
-// var letterTally = function(str, obj) {
-// 	var add = function(str, obj){
-//   if(str.length ===0) {
-//     return {};
-//   } 
-//   var arr = str.split('');
-//   var key = arr[0];
-//   arr.shift()
-//   var str = arr.join('')
-//   if(obj[key]) {
-//     obj[key] +=1;
-//     return Object.assign(obj, letterTally(str, obj));
-//   }
-//   obj[key] =1;
-//   return Object.assign(obj, letterTally(str, obj));
-// }
-// };
+var letterTally = function(str, obj) {
+
+};
 
 // 32. Eliminate consecutive duplicates in a list. If the list contains repeated
 // elements they should be replaced with a single copy of the element. The order of the
